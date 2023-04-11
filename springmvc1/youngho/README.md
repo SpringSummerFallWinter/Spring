@@ -10,3 +10,4 @@
     각 컨트롤러에서는 return 값으로 jsp 파일 명만 반환 하면 된다. 그전에는 model map 을 반환했는데 어떻게 가능할까?   
     model map 을 인자로 받아오면 된다. 
 ## 2. 스프링 MVC - 기본 기능
+  1. [스프링 기본 기능](https://github.com/SpringSummerFallWinter/Spring/blob/main/springmvc1/youngho/basic_feature/basic_feature_spring.md)
