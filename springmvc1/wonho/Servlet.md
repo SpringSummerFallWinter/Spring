@@ -59,3 +59,27 @@
 > WAS 멀티 스레드 지원<br>
 개발자가 멀티 스레드 관련 코드를 신경쓰지 않아도 됨<br>
 멀티 스레드 환경이므로 싱글톤 객체(Servlet, Spring Bean)는 주의해서 사용
+
+## 서블릿 컨테이너 동작 방식
+![ServletOperation](./img/ServletOperation.png)
+
+## HTTP 요청 데이터
+- GET - 쿼리 파라미터
+  - /url?username=hello&age=20
+  - 메시지 바디 없이, URL의 쿼리 파라미터에 데이터를 포함해서 전달
+  - 예) 검색, 필터, 페이징 등에서 많이 사용
+
+- POST - HTML Form
+  - content-type: application/x-www-form-urlencoded
+  - 메시지 바디에 쿼리 파라미터 형식으로 전달 username=hello&age=20
+
+- HTTP message body에 데이터를 직접 담아서 요청
+  - HTTP API에서 주로 사용, JSON, XML, TEXT
+  - 데이터 형식은 주로 JSON 사용
+
+## 서블릿과 JSP의 한계
+- 서블릿으로 개발할 때는 View화면을 위한 HTML을 만드는 작업이 자바 코드에 섞여서 지저분하고 복잡했음
+- 이를 개선하기 위해 JSP를 사용했지만 Java 코드, 데이터를 조회하는 repository 등 다양한 코드가 JSP에 노출되고 너무 많은 역할을 함
+
+## MVC 패턴의 등장
+- 비즈니스 로직은 서블릿 처럼 다른 곳에서 처리하고 JSP라는 목적에 맞게 HTML로 화면을 그리는 일에 집중하도록 하자. 과거 개발자도 비슷한 고민이 있었고 이에 따라 MVC 패턴이 등장함
