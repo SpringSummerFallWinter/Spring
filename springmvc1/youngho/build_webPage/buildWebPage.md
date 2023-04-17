@@ -2,7 +2,7 @@
 
 ```java
 public class BasicItemController {
-    *private final ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
     @Autowired
     public BasicItemController(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
@@ -14,7 +14,7 @@ public class BasicItemController {
 
 ```java
 public class BasicItemController {
-    *private final ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
     public BasicItemController(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
     }
@@ -26,7 +26,7 @@ public class BasicItemController {
 ```java
 @RequiredArgsConstructor
 public class BasicItemController {
-    *private final ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
 }
 ```
 
