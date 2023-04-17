@@ -12,4 +12,4 @@
 ## 2. 스프링 MVC - 기본 기능
   1. [스프링 기본 기능](https://github.com/SpringSummerFallWinter/Spring/blob/main/springmvc1/youngho/basic_feature/basic_feature_spring.md)
 ## 3. 스프링 웹 서비스 만들기  
-  1.[스프링 웹 서비스 만들기](https://github.com/SpringSummerFallWinter/Spring/blob/main/springmvc1/youngho/build_webPage/buildWebPage.md)
+  1. [스프링 웹 서비스 만들기](https://github.com/SpringSummerFallWinter/Spring/blob/main/springmvc1/youngho/build_webPage/buildWebPage.md)
