@@ -14,3 +14,8 @@
       - JDBC 개발
   - soyun
 - 2023.04.26(수)
+  - wonho
+    
+  - youngho(DB1)
+   
+  - soyun
