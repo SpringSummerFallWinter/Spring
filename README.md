@@ -6,7 +6,7 @@
   - wonho
     - [FrontController 복습](./wonho/FrontController/)
     - [N+1 문제](https://seoarc.tistory.com/81)
-  - youngho(DB1)
+  - youngho
     - DB(1) 
       - JDBC 이해
       - JDBC와 최신 데이터 접근 기술
@@ -15,5 +15,5 @@
   - soyun
 - 2023.04.26(수)
   - wonho
-  - youngho(DB1)
+  - youngho
   - soyun
