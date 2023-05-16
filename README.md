@@ -30,3 +30,9 @@
     - MVC2
       - [Validation 오류메세지](./youngho/MVC2/Validation/Validation.md)
   - soyun
+- 2023.05.16(화)
+  - wonho
+  - youngho
+    - MVC2
+      - [Validation](./youngho/MVC2/Validation/Validation.md)
+  - soyun
