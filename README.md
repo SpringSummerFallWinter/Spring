@@ -35,4 +35,5 @@
   - youngho
     - MVC2
       - [Validation](./youngho/MVC2/Validation/Validation.md)
+      - [Bean Validation](./youngho/MVC2/BeanValidation/BeanValidation.md)
   - soyun
