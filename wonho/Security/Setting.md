@@ -17,7 +17,7 @@
 implementation 'org.springframework.boot:spring-boot-starter-security'
 ```
 
-### 의존성 추가 시 일어나는 일
+## 의존성 추가 시 일어나는 일
 
 - 서버가 기동되면 spring security의 초기화 작업 및 보안 설정이 이루어진다
 - 별도의 설정이나 구현을 하지 않아도 기본적인 웹 보안 기능이 현재 시스템에 연동되어 작동한다

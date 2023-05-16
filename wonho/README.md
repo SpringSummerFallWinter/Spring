@@ -13,3 +13,6 @@
 ## Security
 
 - [Security Settings](./Security/Setting.md)
+- [HttpBasic 인증](./Security/HttpBasic.md)
+- [Form 인증](./Security/Form.md)
+- [Logout](./Security/Logout.md)
