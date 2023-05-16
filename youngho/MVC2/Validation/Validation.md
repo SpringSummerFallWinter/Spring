@@ -270,6 +270,7 @@ BindingResult 는 target 객체에 대한 정보를 이미 알고있다. 따라�
 ### <어떤 식으로 오류코드를 작성할 것인가>
 
 오류 코드를 만들 때 다음과 같이 자세히 만들 수도 있고,
+
 required.item.itemName : 상품 이름은 필수 입니다.
 range.item.price : 상품의 가격 범위 오류 입니다.
 또는 다음과 같이 단순하게 만들 수도 있다.
@@ -288,3 +289,254 @@ required: 필수 값 입니다.
 이렇게 계층적으로 설계를 해두고, code 파라미터 입력란에 “required” 라고해두면. 해당 객체와 필드명이 있는 메세지만 level1 으로 출력되고, 없다면 level2 단계로 출력된다. 이렇게 하면 message 프로퍼티에 메세지 추가만 함으로써 편리하게 오류 메세지를 관리 할 수 있다.
 
 스프링은 MessageCodesResolver 라는 것으로 이러한 기능을 지원한다.
+
+**MessageCodesResolver**
+
+```jsx
+String[] messageCodes = codesResolver.resolveMessageCodes("required", "item");
+		for(String m : messageCodes) {
+			System.out.println(m);
+		}
+```
+
+하면 결과로서
+
+```jsx
+required.item
+required
+```
+
+가 나오게 된다.
+
+```jsx
+String[] messageCodes = codesResolver.resolveMessageCodes
+("required", "item", "itemName", String.class);
+```
+
+```jsx
+required.item.itemName
+required.itemName
+required.java.lang.String
+required
+```
+
+이렇게 나온다.
+
+BindingResult.rejectValue 가 내부적으로 resolveMessageCodes 사용한다.
+
+```jsx
+bindingResult.rejectValue("itemName","required")
+를 하면
+new FieldError("item","itemName",null,false,messageCodes,null,null,);
+이걸 생성한다.
+```
+
+MessageCodesResolver
+
+는 검증 오류코드로 메세지 코드들을 생성한다. 
+
+<DefaultMessageCodesResolver 기본 메세지 생성 규칙>
+
+객체 오류의 경우 다음 순서로 2가지 생성
+1.: code + "." + object name
+2.: code
+예) 오류 코드: required, object name: item
+1.: required.item
+2.: required
+
+필드 오류
+필드 오류의 경우 다음 순서로 4가지 메시지 코드 생성
+1.: code + "." + object name + "." + field
+2.: code + "." + field
+3.: code + "." + field type
+4.: code
+예) 오류 코드: typeMismatch, object name "user", field "age", field type: int
+
+1. "typeMismatch.user.age"
+2. "typeMismatch.age"
+3. "typeMismatch.int"
+4. "typeMismatch"
+
+```jsx
+#==ObjectError==
+#Level1
+totalPriceMin.item=상품의 가격 * 수량의 합은 {0}원 이상이어야 합니다. 현재 값 = {1}
+#Level2 - 생략
+totalPriceMin=전체 가격은 {0}원 이상이어야 합니다. 현재 값 = {1}
+#==FieldError==
+#Level1
+required.item.itemName=상품 이름은 필수입니다.
+range.item.price=가격은 {0} ~ {1} 까지 허용합니다.
+max.item.quantity=수량은 최대 {0} 까지 허용합니다.
+#Level2 - 생략
+#Level3
+required.java.lang.String = 필수 문자입니다.
+required.java.lang.Integer = 필수 숫자입니다.
+min.java.lang.String = {0} 이상의 문자를 입력해주세요.
+min.java.lang.Integer = {0} 이상의 숫자를 입력해주세요.
+range.java.lang.String = {0} ~ {1} 까지의 문자를 입력해주세요.
+range.java.lang.Integer = {0} ~ {1} 까지의 숫자를 입력해주세요.
+max.java.lang.String = {0} 까지의 문자를 허용합니다.
+max.java.lang.Integer = {0} 까지의 숫자를 허용합니다.
+#Level4
+required = 필수 값 입니다.
+min= {0} 이상이어야 합니다.
+range= {0} ~ {1} 범위를 허용합니다.
+max= {0} 까지 허용합니다.
+```
+
+이렇게 계층적으로 에러 메세지를 작성해 둘 수 있다.
+
+그런데 여전히 type error가 나면 유저입장에서 불편한 메세지가 뜬다.
+
+```jsx
+가격에 11q를 넣으면
+Failed to convert property value of type java.lang.String to 
+required type java.lang.Integer for property price; 
+nested exception is java.lang.NumberFormatException: For input string: "11q"
+```
+
+이 문제를 해결해보자.
+
+검증 오류 코드는 다음과 같이 2가지로 나눌 수 있다.
+개발자가 직접 설정한 오류 코드 rejectValue() 를 직접 호출
+스프링이 직접 검증 오류에 추가한 경우(주로 타입 정보가 맞지 않음)
+
+price 필드에 문자 "A"를 입력해보자.
+로그를 확인해보면 BindingResult 에 FieldError 가 담겨있고, 다음과 같은 메시지 코드들이 생성된
+것을 확인할 수 있다.
+codes[typeMismatch.item.price,typeMismatch.price,typeMismatch.java.lang.Integer,typ
+eMismatch]
+
+다음과 같이 4가지 메시지 코드가 입력되어 있다.
+typeMismatch.item.price
+typeMismatch.price
+typeMismatch.java.lang.Integer
+typeMismatch
+
+errors.properties에 해당 메세지 에러가 없으므로 디폴트 메세지가 출력된다. 이를 막기 위해선 내가 errors.properties에 해당 메세지를 작성해주면 된다.
+
+```jsx
+typeMismatch.java.lang.Integer=숫자를 입력해주세요.
+typeMismatch=타입 오류입니다.
+```
+
+### <Validator 분리>
+
+현재 controller에 성공로직은 3줄이고 대부분이 에러 처리 로직이다. 이 문제를 해결해보자.
+
+Validator 클래스를 만들고 검증 로직을 거기 담아보자.
+
+```jsx
+package hello.itemservice.web.validation;
+
+import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
+
+import hello.itemservice.domain.item.Item;
+
+public class ItemValidator implements Validator{
+
+	@Override
+	public boolean supports(Class<?> clazz) {
+		return Item.class.isAssignableFrom(clazz);
+	}
+
+	@Override
+	public void validate(Object target, Errors errors) {
+		Item item = (Item) target;
+		
+		 //검증 로직
+        if (!StringUtils.hasText(item.getItemName())) {
+        	errors.rejectValue("itemName","required");
+        }
+        if (item.getPrice() == null || item.getPrice() < 1000 || item.getPrice() >
+                1000000) {
+        	errors.rejectValue("price","range", new Object[]{1000,1000000}, null);
+        }
+        if (item.getQuantity() == null || item.getQuantity() >= 9999) {
+        	errors.rejectValue("quantity","max", new Object[]{9999}, null);
+        }
+        //특정 필드가 아닌 복합 룰 검증
+        if (item.getPrice() != null && item.getQuantity() != null) {
+            int resultPrice = item.getPrice() * item.getQuantity();
+            if (resultPrice < 10000) {
+            	errors.reject("totalPriceMin",new Object[]{10000, resultPrice}, null);
+            }
+        }
+		
+	}
+
+}
+```
+
+addItem 메소드 상단에 다음 한줄만 추가해주면 된다.
+
+```jsx
+itemValidator.validate(item, bindingResult);
+```
+
+**ValidationControllerV2-addItemV6**
+
+```jsx
+public class ValidationItemControllerV2 {
+
+    private final ItemRepository itemRepository;
+    private final ItemValidator itemValidator;
+    
+    @InitBinder
+    public void init(WebDataBinder dataBinder) {
+    	dataBinder.addValidators(itemValidator);
+    }
+```
+
+컨트롤러 상단에 @InitBinder 를 설정해준다.
+
+그러면 itemValidator 가 사용될때마다, 사용되기전에 WebDataBinder가 작동한다.
+
+그러면
+
+```jsx
+itemValidator.validate(item, bindingResult);
+```
+
+메소드 마다 해줄 필요가 없다. 대신
+
+ModelAttribute 앞에 @Validated 를 작성해야한다.
+
+```jsx
+public String addItemV6(@Validated @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes
+            redirectAttributes)
+```
+
+- 동작 방식
+@Validated 는 검증기를 실행하라는 애노테이션이다.
+이 애노테이션이 붙으면 앞서 WebDataBinder 에 등록한 검증기를 찾아서 실행한다. 그런데 여러 검증기를 등록한다면 그 중에 어떤 검증기가 실행되어야 할지 구분이 필요하다. 이때 supports() 가 사용된다.
+여기서는 supports(Item.class) 호출되고, 결과가 true 이므로 ItemValidator 의 validate() 가
+호출된다.
+
+```jsx
+@PostMapping("/add")
+    public String addItemV6(@Validated @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes
+            redirectAttributes) {
+       
+        //검증에 실패하면 다시 입력 폼으로
+        if (bindingResult.hasErrors()) {
+            log.info("errors= {}", bindingResult);
+            return "validation/v2/addForm";
+        }
+        //성공 로직
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/validation/v2/items/{itemId}";
+    }
+```
+
+검증시 @Validated @Valid 둘다 사용가능하다.
+
+> javax.validation.@Valid 를 사용하려면 build.gradle 의존관계 추가가 필요하다.
+implementation 'org.springframework.boot:spring-boot-starter-validation'
+@Validated 는 스프링 전용 검증 애노테이션이고, @Valid 는 자바 표준 검증 애노테이션이다.
+>
