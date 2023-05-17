@@ -48,5 +48,5 @@
       - [Security Filter](./wonho/Security/Filter.md)
   - youngho
     - MVC2
-      - [Exception] (./youngho/MVC2/Exception/Exception.md)   
+      - [Exception](./youngho/MVC2/Exception/Exception.md)   
   - soyun
