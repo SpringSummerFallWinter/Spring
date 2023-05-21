@@ -50,3 +50,9 @@
     - MVC2
       - [Exception](./youngho/MVC2/Exception/Exception.md)   
   - soyun
+- 2023.05.20(토)
+  - wonho
+  - youngho
+    - MVC2
+      - [Exception](./youngho/MVC2/Exception/Exception.md)   
+  - soyun
