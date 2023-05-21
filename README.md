@@ -53,6 +53,6 @@
 - 2023.05.20(토)
   - wonho
   - youngho
-    - MVC2
-      - [Exception](./youngho/MVC2/Exception/Exception.md)   
+    - DB(1)
+      - [Exception](./youngho/DB1/Exception.md)   
   - soyun
