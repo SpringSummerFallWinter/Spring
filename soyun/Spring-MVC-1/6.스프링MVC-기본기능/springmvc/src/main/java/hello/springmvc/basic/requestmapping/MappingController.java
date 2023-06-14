@@ -18,14 +18,14 @@ public class MappingController {
     }
 
     // GET 외에는 405 ERROR 발생
-    @RequestMapping(value = "/maaping-get-v1", method = RequestMethod.GET)
+    @RequestMapping(value = "/mapping-get-v1", method = RequestMethod.GET)
     public String mappingGetV1() {
         log.info("helloBasic");
         return "ok";
     }
 
     // method 축약형
-    @GetMapping(value = "/maaping-get-v2")
+    @GetMapping(value = "/mapping-get-v2")
     public String mappingGetV2() {
         log.info("helloBasic");
         return "ok";
