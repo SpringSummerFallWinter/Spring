@@ -16,4 +16,6 @@
 
 [5. 스프링 MVC-구조 이해](./5.스프링MVC-구조이해/servlet/docs/summary.md)
 
+[6. 스프링 MVC-기본 기능](./6.스프링MVC-기본기능/springmvc/docs/summary.md)
+
 <br/>
